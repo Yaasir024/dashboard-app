@@ -1,0 +1,4 @@
+SubscribersManager
+    -Subscribers.vue
+        --Header
+        --Filter

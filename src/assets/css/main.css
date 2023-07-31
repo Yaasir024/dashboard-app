@@ -1,0 +1,52 @@
+@import "./base.css";
+
+.base-transition {
+  transition: transform 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Nav Animation */
+.nav-enter-active,
+.nav-leave-active {
+  transition: all 0.4s ease;
+}
+
+.nav-enter-from,
+.nav-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Menu Animation */
+.menu-enter-active,
+.menu-leave-active {
+  transition: transform 0.3s ease;
+  transform-origin: top left;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+  transform: scale(0);
+}
+.scale-center-enter-active,
+.scale-center-leave-active {
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+}
+
+.scale-center-enter-from,
+.scale-center-leave-to {
+  transform: scale(0);
+}
+
+/* LINK ANIMATION */
+.link {
+  transition: all 0.3s ease-in-out;
+}
+
+.link:hover {
+  color: #e88b2e;
+}

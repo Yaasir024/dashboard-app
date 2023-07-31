@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "Aeonik";
+  src: url("./../fonts/aeonik/aeonik-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Aeonik";
+  src: url("./../fonts/aeonik/aeonik-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Aeonik";
+  src: url("./../fonts/aeonik/aeonik-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: #222;
+  background: #f7f7f7;
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: "Aeonik", sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
