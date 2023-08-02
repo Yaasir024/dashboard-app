@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-import Fields from '@/components/sections/database/modals/records/Fields.vue'
+import Fields from '@/components/branches/database/modals/records/Fields.vue'
 
 import { useDatabaseStore } from '@/stores/workspace/database'
 
@@ -95,18 +95,21 @@ const confirmCancel = () => {
                     leave-to="opacity-0 scale-95">
                     <DialogPanel
                         class="mx-auto max-w-[800px] transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
-                        <div class="px-6 py-4 flex items-center justify-end">
+                        <div class="px-6 py-4 flex items-center justify-between">
+                            <div class="">
+                                <h3 class="text-lg capitalize">{{ useDatabase.modalType }} Record</h3>
+                            </div>
                             <div class="flex items-center">
                                 <button class="border-none outline-none mr-3">
                                     <PrinterIcon class="h-5 w-5" />
                                 </button>
-                                <button class="border-none outline-none">
+                                <button @click="useDatabase.deleteRecord()" class="border-none outline-none">
                                     <TrashIcon class="h-5 w-5 hover:text-red-600" />
                                 </button>
                             </div>
                         </div>
                         <div class="max-h-96 scroll-py-3 overflow-y-auto p-3">
-                            {{ useDatabase.recordData }}
+                            <!-- {{ useDatabase.recordData }} -->
                             <div class="max-w-[600px] mx-auto">
                                 <div v-for="field in useDatabase.fields.data" :key="field.uid" class="my-4">
                                     <div class="flex">

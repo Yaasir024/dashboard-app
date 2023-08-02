@@ -5,10 +5,10 @@ import { useDatabaseStore } from '@/stores/workspace/database'
 
 
 import MainSection from '@/template/sections/Main.vue'
-import FieldsModal from '@/components/sections/database/FieldsModal.vue'
-import RecordModal from '@/components/sections/database/modals/records/Main.vue'
-import TableHead from '@/components/sections/database/table/Head.vue'
-import TableBody from '@/components/sections/database/table/Body.vue'
+import FieldsModal from '@/components/branches/database/FieldsModal.vue'
+import RecordModal from '@/components/branches/database/modals/records/Main.vue'
+import TableHead from '@/components/branches/database/table/Head.vue'
+import TableBody from '@/components/branches/database/table/Body.vue'
 
 const useDatabase = useDatabaseStore()
 
@@ -18,7 +18,8 @@ const useDatabase = useDatabaseStore()
     <MainSection>
         <template #menu-bar>
             <div class="flex items-center">
-                <button @click="useDatabase.openNewRecord()" class="bg-indigo-600 text-white py-1.5 px-4 rounded-lg">New Record</button>
+                <button @click="useDatabase.openNewRecord()" class="bg-indigo-600 text-white py-1.5 px-4 rounded-lg">New
+                    Record</button>
             </div>
         </template>
         <template #main>

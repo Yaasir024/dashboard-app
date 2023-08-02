@@ -13,6 +13,7 @@ import {
     PhoneIcon,
     CalendarIcon,
     ClockIcon,
+    CogIcon,
 } from '@heroicons/vue/24/outline'
 
 
@@ -37,28 +38,22 @@ const fieldIcons = {
 
 <template>
     <thead>
-        <tr class="bg-gray-100">
-            <th class="h-[32px] border-b border-r flex items-center gap-x-2">
-                <div class="h-[32px] w-[35px] flex items-center justify-center">
-
-                </div>
-                <div class="h-[32px] w-[30px] flex items-center justify-center">
-
-                </div>
-            </th>
+        <tr class="bg-gray-100 inline-table h-[32px]">
             <th v-for="field in useDatabase.fields.data" :key="field.uid"
-                class="fields min-w-[200px] border-r border-b px-[6px] ">
+                class="group fields min-w-[200px] h-[32px] border-r border-b px-[6px] ">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <component :is="fieldIcons[field.type]" class="h-4 w-4" aria-hidden="true" />
                         <span class="ml-2">{{ field.name }}</span>
                     </div>
-
+                    <button class="opacity-0 hover:group:opacity-1">
+                        <CogIcon class="h-4 w-4" />
+                    </button>
                 </div>
             </th>
-            <th class="min-w-[100px] border-r ">
+            <th class="min-w-[100px] h-[32px] border-r ">
                 <button @click="useDatabase.showFieldsModal = !useDatabase.showFieldsModal"
-                    class="w-full h-full bg-blue-400">Add</button>
+                    class="w-full h-full ">Add</button>
             </th>
         </tr>
     </thead>

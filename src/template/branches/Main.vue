@@ -22,6 +22,8 @@ const branches = computed(() => {
         return useWorkspace.branchesMetadata.data.branches
     }
 })
+
+
 </script>
 
 
@@ -30,7 +32,7 @@ const branches = computed(() => {
         <div class="">
             <header class=" flex items-center justify-between py-3 px-8 bg-[#166ee1]">
                 <div class="flex items-center">
-                    <h2 class="text-white text-[18px] font-bold">Test Workspace</h2>
+                    <slot name="branch-name"></slot>
                 </div>
                 <div class="flex items-center">
                     <div class="relative mr-3">
@@ -64,7 +66,7 @@ const branches = computed(() => {
                     <ul class="flex flex-col" v-if="branches">
                         <li :class="route.params.branch == view.uid ? 'bg-gray-200' : ''"
                             class="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-200 rounded-md"
-                            v-for="view in branches" :key="view.uid">
+                            v-for="view in branches" :key="view.uid" @click="useWorkspace.pushToBranch(view.uid)">
                             <div class="flex items-center">
                                 <div
                                     class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-indigo-500 mr-2">

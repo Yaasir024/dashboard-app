@@ -1,6 +1,8 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
+import { useAuthStore } from "@/stores/auth";
+
 import { firestoreDb } from "@/services/firebase/init";
 
 import router from "@/router";
@@ -30,7 +32,11 @@ import {
 } from "firebase/firestore";
 
 export const useDatabaseStore = defineStore("database", () => {
+  const useAuth = useAuthStore();
   const route = useRoute();
+
+  const workspaceid = route.params.workspaceid;
+  const branch = route.params.branch;
 
   const fields = ref({
     data: [],
@@ -42,10 +48,10 @@ export const useDatabaseStore = defineStore("database", () => {
     collection(
       firestoreDb,
       "users",
-      "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+      useAuth.userId.uid,
       "workspaces",
-      "oComMQQujv4aDWaewLH4",
-      "table-1",
+      workspaceid,
+      branch,
       "fields",
       "data"
     ),
@@ -78,10 +84,10 @@ export const useDatabaseStore = defineStore("database", () => {
     const docRef = doc(
       firestoreDb,
       "users",
-      "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+      useAuth.userId.uid,
       "workspaces",
-      "oComMQQujv4aDWaewLH4",
-      "table-1",
+      workspaceid,
+      branch,
       "fields",
       "data",
       selectedField.value.uid
@@ -104,7 +110,6 @@ export const useDatabaseStore = defineStore("database", () => {
       });
   };
 
-
   const records = ref({
     data: [],
     status: false,
@@ -115,10 +120,10 @@ export const useDatabaseStore = defineStore("database", () => {
     collection(
       firestoreDb,
       "users",
-      "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+      useAuth.userId.uid,
       "workspaces",
-      "oComMQQujv4aDWaewLH4",
-      "table-1",
+      workspaceid,
+      branch,
       "records",
       "data"
     ),
@@ -138,6 +143,7 @@ export const useDatabaseStore = defineStore("database", () => {
 
   const recordData = ref(null);
   const showRecordsModal = ref(false);
+  const modalType = ref("");
 
   const abstractToObject = (arr) => {
     const result = {};
@@ -149,12 +155,39 @@ export const useDatabaseStore = defineStore("database", () => {
   const openNewRecord = () => {
     console.log(abstractToObject(fields.value.data));
     recordData.value = abstractToObject(fields.value.data);
+    modalType.value = "new";
+    showRecordsModal.value = true;
+  };
+  const openExistingRecord = (record) => {
+    let newRecord = { ...record };
+    // Add uids from array that are not already in the main object
+    fields.value.data.forEach((item) => {
+      const uid = item.uid;
+      if (!(uid in newRecord)) {
+        newRecord[uid] = "";
+      }
+    });
+
+    // Remove uids from main object that are not in the array
+    for (const key in newRecord) {
+      if (
+        !fields.value.data.some((item) => item.uid === key) &&
+        key !== "createdAt" &&
+        key !== "updatedAt" &&
+        key !== "uid"
+      ) {
+        delete newRecord[key];
+      }
+    }
+    recordData.value = newRecord;
+    modalType.value = "edit";
     showRecordsModal.value = true;
   };
 
   const saveRecord = async () => {
-    // /users/oZ7B7t7lX4OLk2psA0BievhJ7O43/workspaces/oComMQQujv4aDWaewLH4/table-1/fields
-    recordData.value.uid = uid(8);
+    if (!recordData.value.uid) {
+      recordData.value.uid = uid(8);
+    }
     if (!recordData.value.createdAt) {
       recordData.value.createdAt = serverTimestamp();
     }
@@ -162,21 +195,46 @@ export const useDatabaseStore = defineStore("database", () => {
     const docRef = doc(
       firestoreDb,
       "users",
-      "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+      useAuth.userId.uid,
       "workspaces",
-      "oComMQQujv4aDWaewLH4",
-      "table-1",
+      workspaceid,
+      branch,
       "records",
       "data",
       recordData.value.uid
     );
     await setDoc(docRef, recordData.value)
       .then(async () => {
-        console.log("pushed");
         showRecordsModal.value = false;
+        console.log("pushed");
         setTimeout(() => {
           recordData.value = {};
         }, "500");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deleteRecord = async () => {
+    console.log('del')
+    const docRef = doc(
+      firestoreDb,
+      "users",
+      useAuth.userId.uid,
+      "workspaces",
+      workspaceid,
+      branch,
+      "records",
+      "data",
+      recordData.value.uid
+    );
+    await deleteDoc(docRef)
+      .then(async () => {
+        showRecordsModal.value = false;
+        console.log("deleted");
+        setTimeout(() => {
+          recordData.value = {};
+        }, "200");
       })
       .catch((err) => {
         console.log(err);
@@ -192,7 +250,10 @@ export const useDatabaseStore = defineStore("database", () => {
     records,
     recordData,
     showRecordsModal,
+    modalType,
     openNewRecord,
+    openExistingRecord,
     saveRecord,
+    deleteRecord,
   };
 });

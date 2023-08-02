@@ -1,6 +1,8 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
+import { useAuthStore } from "@/stores/auth";
+
 import { firestoreDb } from "@/services/firebase/init";
 
 import router from "@/router";
@@ -30,7 +32,13 @@ import {
 } from "firebase/firestore";
 
 export const useWorkspaceStore = defineStore("workspace", () => {
+  const useAuth = useAuthStore();
   const route = useRoute();
+  const workspaceid = route.params.workspaceid;
+
+  const pushToBranch = (uid) => {
+    router.push({ path: `/workspace/${workspaceid}/${uid}` });
+  };
 
   const branchesMetadata = ref({
     data: null,
@@ -40,9 +48,9 @@ export const useWorkspaceStore = defineStore("workspace", () => {
   const branchesMetadataRef = doc(
     firestoreDb,
     "users",
-    "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+    useAuth.userId.uid,
     "workspaces",
-    "oComMQQujv4aDWaewLH4"
+    route.params.workspaceid
   );
   onSnapshot(branchesMetadataRef, (doc) => {
     console.log(doc.data());
@@ -50,5 +58,5 @@ export const useWorkspaceStore = defineStore("workspace", () => {
     branchesMetadata.value.status = true;
   });
 
-  return { route, branchesMetadata };
+  return { route, workspaceid, pushToBranch, branchesMetadata };
 });

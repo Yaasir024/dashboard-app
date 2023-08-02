@@ -74,13 +74,13 @@ const items = [
         color: 'bg-indigo-500',
         icon: PhoneIcon,
     },
-    {
-        id: 1,
-        name: 'URL',
-        description: 'Add a link or url.',
-        color: 'bg-indigo-500',
-        icon: LinkIcon,
-    },
+    // {
+    //     id: 1,
+    //     name: 'URL',
+    //     description: 'Add a link or url.',
+    //     color: 'bg-indigo-500',
+    //     icon: LinkIcon,
+    // },
     {
         id: 1,
         name: 'Date',
@@ -88,28 +88,27 @@ const items = [
         color: 'bg-indigo-500',
         icon: CalendarIcon,
     },
-    {
-        id: 1,
-        name: 'Time',
-        description: 'Add a Time field.',
-        color: 'bg-indigo-500',
-        icon: ClockIcon,
-    },
-    {
-        id: 1,
-        name: 'Created At',
-        description: 'Show time and date document was created.',
-        color: 'bg-indigo-500',
-        icon: ClockIcon,
-    },
-    {
-        id: 1,
-        name: 'Last Modified At',
-        description: 'Show time and date document was modified.',
-        color: 'bg-indigo-500',
-        icon: ClockIcon,
-    },
-    // More items...
+    // {
+    //     id: 1,
+    //     name: 'Time',
+    //     description: 'Add a Time field.',
+    //     color: 'bg-indigo-500',
+    //     icon: ClockIcon,
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Created At',
+    //     description: 'Show time and date document was created.',
+    //     color: 'bg-indigo-500',
+    //     icon: ClockIcon,
+    // },
+    // {
+    //     id: 1,
+    //     name: 'Last Modified At',
+    //     description: 'Show time and date document was modified.',
+    //     color: 'bg-indigo-500',
+    //     icon: ClockIcon,
+    // },
 ]
 const icons = {
     'Text': PencilSquareIcon,
