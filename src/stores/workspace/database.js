@@ -70,6 +70,7 @@ export const useDatabaseStore = defineStore("database", () => {
   });
 
   const showFieldsModal = ref(false);
+  const showFieldSettingModal = ref(false);
   const selectedField = ref({
     uid: "",
     name: "",
@@ -78,9 +79,12 @@ export const useDatabaseStore = defineStore("database", () => {
   });
 
   const saveField = async () => {
-    // /users/oZ7B7t7lX4OLk2psA0BievhJ7O43/workspaces/oComMQQujv4aDWaewLH4/table-1/fields
-    selectedField.value.uid = uid(8);
-    selectedField.value.createdAt = serverTimestamp();
+    if (!selectedField.value.uid) {
+      selectedField.value.uid = uid(8);
+    }
+    if(!selectedField.value.createdAt) {
+      selectedField.value.createdAt = serverTimestamp();
+    }
     const docRef = doc(
       firestoreDb,
       "users",
@@ -96,6 +100,7 @@ export const useDatabaseStore = defineStore("database", () => {
       .then(async () => {
         console.log("pushed");
         showFieldsModal.value = false;
+        showFieldSettingModal.value = false;
         setTimeout(() => {
           selectedField.value = {
             uid: "",
@@ -104,6 +109,36 @@ export const useDatabaseStore = defineStore("database", () => {
             createdAt: null,
           };
         }, "500");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deleteField = async () => {
+    const docRef = doc(
+      firestoreDb,
+      "users",
+      useAuth.userId.uid,
+      "workspaces",
+      workspaceid,
+      branch,
+      "fields",
+      "data",
+      selectedField.value.uid
+    );
+    await deleteDoc(docRef)
+      .then(async () => {
+        console.log("deleted");
+        showFieldsModal.value = false;
+        showFieldSettingModal.value = false;
+        setTimeout(() => {
+          selectedField.value = {
+            uid: "",
+            name: "",
+            type: "",
+            createdAt: null,
+          };
+        }, "200");
       })
       .catch((err) => {
         console.log(err);
@@ -216,7 +251,7 @@ export const useDatabaseStore = defineStore("database", () => {
       });
   };
   const deleteRecord = async () => {
-    console.log('del')
+    console.log("del");
     const docRef = doc(
       firestoreDb,
       "users",
@@ -245,8 +280,10 @@ export const useDatabaseStore = defineStore("database", () => {
     route,
     fields,
     showFieldsModal,
+    showFieldSettingModal,
     selectedField,
     saveField,
+    deleteField,
     records,
     recordData,
     showRecordsModal,
