@@ -129,8 +129,9 @@ const icons = {
 
 
 
-const confirmCancel = () => {
-    cancelCreateField()
+const cancelCreateField = () => {
+    useDatabase.showFieldSettingModal = false
+    // cancelCreateField()
 }
 </script>
 

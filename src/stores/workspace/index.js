@@ -36,6 +36,14 @@ export const useWorkspaceStore = defineStore("workspace", () => {
   const route = useRoute();
   const workspaceid = route.params.workspaceid;
 
+  const showBranchModal = ref(false);
+
+  const branchData = ref({
+    name: "",
+    type: "",
+    uid: "",
+    linkedDb: null,
+  });
   const pushToBranch = (uid) => {
     router.push({ path: `/workspace/${workspaceid}/${uid}` });
   };
@@ -58,5 +66,49 @@ export const useWorkspaceStore = defineStore("workspace", () => {
     branchesMetadata.value.status = true;
   });
 
-  return { route, workspaceid, pushToBranch, branchesMetadata };
+  const addBranch = async () => {
+    // const full
+    const docRef = doc(
+      firestoreDb,
+      "users",
+      useAuth.userId.uid,
+      "workspaces",
+      workspaceid
+    );
+    await setDoc(
+      docRef,
+      {
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    )
+      .then(async () => {
+        await updateDoc(docRef, {
+          branches: arrayUnion(branchData.value),
+        });
+        return;
+      })
+      .then(() => {
+        // router.push({
+        //   path: `/workspace/${newDashboardData.value.uid}/overview`,
+        // });
+        console.log("done");
+        showBranchModal.value = false
+        branchData.value = {
+          name: "",
+          type: "",
+          uid: "",
+        };
+      });
+  };
+
+  return {
+    route,
+    showBranchModal,
+    branchData,
+    workspaceid,
+    pushToBranch,
+    branchesMetadata,
+    addBranch,
+  };
 });

@@ -32,7 +32,16 @@ import {
 export const useDashboardStore = defineStore("dashboard", () => {
   const route = useRoute();
 
-  const workspaceMetadata = ref(null)
+  const showDashboard = ref(false);
+
+  const newDashboardData = ref({
+    uid: "",
+    name: "",
+    icon: "",
+    type: "basic",
+  });
+
+  const workspaceMetadata = ref(null);
   const getWorkspaceData = async (id) => {
     const docRef = doc(
       firestoreDb,
@@ -42,10 +51,49 @@ export const useDashboardStore = defineStore("dashboard", () => {
       "all"
     );
     await getDoc(docRef).then((doc) => {
-        workspaceMetadata.value = doc.data()
+      workspaceMetadata.value = doc.data().data;
       console.log(doc.data());
     });
   };
 
-  return { route, workspaceMetadata, getWorkspaceData };
+  const pushToWorkspace = (workspaceid) => {
+    router.push({ path: `/workspace/${workspaceid}/overview` });
+  };
+
+  const addWorkspace = async () => {
+    newDashboardData.value.createdAt = new Date();
+    newDashboardData.value.uid = uid(20);
+    // const full
+    const docRef = doc(
+      firestoreDb,
+      "users",
+      "oZ7B7t7lX4OLk2psA0BievhJ7O43",
+      "workspaces",
+      "all"
+    );
+    await updateDoc(docRef, {
+      data: arrayUnion(newDashboardData.value),
+    }).then(() => {
+      router.push({
+        path: `/workspace/${newDashboardData.value.uid}/overview`,
+      });
+      console.log("done");
+      newDashboardData.value.uid = {
+        uid: "",
+        name: "",
+        icon: "",
+        type: "basic",
+      };
+    });
+  };
+
+  return {
+    route,
+    showDashboard,
+    newDashboardData,
+    workspaceMetadata,
+    getWorkspaceData,
+    pushToWorkspace,
+    addWorkspace,
+  };
 });

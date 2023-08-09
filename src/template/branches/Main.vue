@@ -3,6 +3,9 @@ import { computed } from 'vue'
 
 import { useRoute } from "vue-router";
 
+import Icon from '@/components/global/Icons.vue';
+
+
 
 import { BellIcon, Bars3Icon } from '@heroicons/vue/20/solid'
 import { TableCellsIcon } from '@heroicons/vue/24/outline'
@@ -20,6 +23,8 @@ const viewIcons = {
 const branches = computed(() => {
     if (useWorkspace.branchesMetadata.data) {
         return useWorkspace.branchesMetadata.data.branches
+    }else if (!useWorkspace.branchesMetadata.data && useWorkspace.branchesMetadata.status) {
+        return null
     }
 })
 
@@ -49,13 +54,13 @@ const branches = computed(() => {
                     </div>
                 </div>
             </header>
-            <div class="w-full py-2 px-9 flex items-center justify-between bg-white border-b">
+            <div class="w-full py-2 px-9 flex items-center bg-white border-b">
                 <div class="flex items-center">
                     <button class="p-2 bg-gray-300">
                         <Bars3Icon class="h-4 w-4" />
                     </button>
                 </div>
-                <div class="">
+                <div class="flex-1 items-center">
                     <slot name="menu-bar"></slot>
                 </div>
             </div>
@@ -70,7 +75,7 @@ const branches = computed(() => {
                             <div class="flex items-center">
                                 <div
                                     class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-indigo-500 mr-2">
-                                    <component :is="viewIcons[view.type]" class="h-5 w-5 text-white" aria-hidden="true" />
+                                    <Icon :iconName="view.type" :style="'h-5 w-5 text-white'" />
                                 </div>
                                 <span class="text-[15px] font-medium">{{ view.name }}</span>
                             </div>

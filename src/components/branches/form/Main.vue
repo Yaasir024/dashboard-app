@@ -31,41 +31,13 @@ const addIndex = (i) => {
             </h2>
         </template>
         <template #menu-bar>
-            <div class="flex items-center justify-end">
+            <div class="flex items-center">
                 <button @click="useDatabase.openNewRecord()" class="bg-indigo-600 text-white py-1.5 px-4 rounded-lg">New
                     Record</button>
             </div>
         </template>
         <template #main>
-            <div class="w-[calc(100vw-300px)] overflow-y-auto pr-40 flex">
-                <div class="sticky  left-0 flex flex-col bg-white">
-                    <div class="bg-gray-100 h-[32px] border-b border-r flex items-center gap-x-2">
-                        <div class="h-[32px] w-[35px] flex items-center justify-center">
-
-                        </div>
-                        <div class="h-[32px] w-[30px] flex items-center justify-center">
-
-                        </div>
-                    </div>
-                    <div v-for="(record, index) in useDatabase.records.data" :key="record.uid" class="h-[32px] border-b border-r flex items-center gap-x-2">
-                        <div class="h-[32px] w-[35px] flex items-center justify-center">
-                            {{ addIndex(index) }}
-                        </div>
-                        <div class="h-[32px] w-[30px] flex items-center justify-center">
-                            <button @click="useDatabase.openExistingRecord(record)" class="flex items-center justify-center">
-                                <ArrowsPointingOutIcon class="h-3 w-3" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="database-table">
-                    <TableHead />
-                    <TableBody />
-                </table>
-            </div>
-            <FieldsModal />
-            <RecordModal />
+            Form
         </template>
     </MainSection>
 </template>
